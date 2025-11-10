@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SRET Student Complaint Portal</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+
+    .header {
+      background-color: #003366;
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      height: 60px;
+      margin-right: 20px;
+    }
+
+    .header-text {
+      flex-grow: 1;
+    }
+
+    .header-text h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .header-text p {
+      margin: 5px 0 0;
+      font-size: 0.9rem;
+    }
+
+    .logout-button {
+      background-color: #d9534f;
+      color: white;
+      padding: 8px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+
+    .logout-button:hover {
+      background-color: #c9302c;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 25px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #003366;
+      margin-top: 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #003366;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+      color: #003366;
+    }
+
+    input, select, textarea {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: #fafafa;
+      transition: all 0.3s;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #0066cc;
+      box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+      background-color: white;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    button {
+      background-color: #003366;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background-color: #004080;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .secondary-button {
+      background-color: #6c757d;
+    }
+
+    .secondary-button:hover {
+      background-color: #5a6268;
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .register-link a {
+      color: #003366;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background-color: #003366;
+      color: white;
+      margin-top: 40px;
+      font-size: 0.9rem;
+    }
+
+    select:disabled {
+      background-color: #f0f0f0;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #loginContainer, #complaintContainer, #forgotPasswordContainer, #registerContainer {
+      transition: all 0.3s ease;
+    }
+
+    .user-info {
+      background-color: #f0f8ff;
+      padding: 18px;
+      border-radius: 8px;
+      margin-bottom: 25px;
+      border-left: 4px solid #003366;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .user-info p {
+      margin: 8px 0;
+    }
+
+    .forgot-password-link {
+      text-align: right;
+      margin-top: -8px;
+      margin-bottom: 5px;
+    }
+
+    .forgot-password-link a {
+      color: #0066cc;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .forgot-password-link a:hover {
+      text-decoration: underline;
+    }
+
+    .back-to-login {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .back-to-login a {
+      color: #0066cc;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .back-to-login a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      padding: 12px 15px;
+      margin: 15px 0;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+
+    .success {
+      background-color: #e6f7ee;
+      color: #0d6832;
+      border-left: 4px solid #28a745;
+    }
+
+    .error {
+      background-color: #fdecea;
+      color: #b71c1c;
+      border-left: 4px solid #dc3545;
+    }
+    
+    /* Password container styling */
+    .password-container {
+      position: relative;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 40px;
+      cursor: pointer;
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    .password-toggle:hover {
+      color: #003366;
+    }
+    
+    .password-requirements {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #666;
+      line-height: 1.5;
+      background: #f9f9f9;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #eee;
+    }
+    
+    .password-requirements ul {
+      margin: 8px 0 0 0;
+      padding-left: 20px;
+    }
+    
+    .password-requirements li {
+      margin-bottom: 5px;
+    }
+    
+    .password-requirements .valid {
+      color: #28a745;
+    }
+    
+    .password-requirements .invalid {
+      color: #666;
+    }
+    
+    .input-group {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .input-group > div {
+      flex: 1;
+    }
+    
+    .form-section {
+      background: #f9fbfd;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #eaeaea;
+    }
+    
+    .form-section-title {
+      font-size: 1.1rem;
+      color: #003366;
+      margin-top: 0;
+      margin-bottom: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eaeaea;
+    }
+    
+    @media (max-width: 650px) {
+      .container {
+        margin: 15px;
+        padding: 20px;
+      }
+      
+      .input-group {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+      
+      .logo {
+        margin: 0 auto 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <img src="sretlogo.png" alt="SRET Logo" class="logo" />
+    <div class="header-text">
+      <h1>SRI RAMACHANDRA ENGINEERING AND TECHNOLOGY</h1>
+      <p>Institute of Higher Education and Research, Porur, Chennai</p>
+    </div>
+    <a href="#" id="logoutButton" class="logout-button hidden">Logout</a>
+  </div>
+
+  <!-- Login Container -->
+  <div class="container" id="loginContainer">
+    <h2>Student Login</h2>
+    <form id="loginForm">
+      <div id="loginMessage" class="message hidden"></div>
+      
+      <div class="form-section">
+        <label for="uniqueID">Unique ID:</label>
+        <input type="text" id="uniqueID" required placeholder="E0124001" />
+
+        <div class="password-container">
+          <label for="password">Password:</label>
+          <input type="password" id="password" required placeholder="••••••••" />
+          <span class="password-toggle" id="loginPasswordToggle">Show</span>
+        </div>
+
+        <div class="forgot-password-link">
+          <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+        </div>
+      </div>
+
+      <button type="submit">Login</button>
+      <div class="register-link">
+        <a href="#" id="registerLink">New Student? Register Here</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Register Container -->
+  <div class="container hidden" id="registerContainer">
+    <h2>Student Registration</h2>
+    <form id="registerForm">
+      <div id="registerMessage" class="message hidden"></div>
+      
+      <div class="form-section">
+        <div class="form-section-title">Personal Information</div>
+        
+        <div class="input-group">
+          <div>
+            <label for="regName">Full Name:</label>
+            <input type="text" id="regName" required placeholder="Enter your full name">
+          </div>
+          
+          <div>
+            <label for="regEmail">Institutional Email:</label>
+            <input type="email" id="regEmail" required placeholder="example@sriher.edu.in">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div>
+            <label for="regUniqueId">Unique ID:</label>
+            <input 
+              type="text" 
+              id="regUniqueId" 
+              required 
+              placeholder="E.g., E0124001"
+              pattern="E(01|02|03|05|06)(19|20|21|22|23|24)[0-9]{3}"
+              title="Format: E + Dept Code (01/02/03/05/06) + Year (19–24) + 3-digit Roll No">
+          </div>
+          
+          <div>
+            <label for="regDepartment">Department:</label>
+            <select id="regDepartment" name="department" required>
+              <option value="">Select Department</option>
+              <option value="CSE (AI & ML)">CSE (AI & ML)</option>
+              <option value="CSE (AI & DA)">CSE (AI & DA)</option>
+              <option value="Cyber Security and IoT">Cyber Security and IoT</option>
+              <option value="Computer Science and Medical Engineering (AI & DA)">Computer Science and Medical Engineering (AI & DA)</option>
+              <option value="ECE">ECE</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="form-section-title">Account Security</div>
+        
+        <div class="input-group">
+          <div class="password-container">
+            <label for="regPassword">Password:</label>
+            <input type="password" id="regPassword" required placeholder="Create a password">
+            <span class="password-toggle" id="regPasswordToggle">Show</span>
+            
+            <div class="password-requirements">
+              <p>Password must meet the following requirements:</p>
+              <ul>
+                <li id="lengthReq" class="invalid">At least 8 characters long</li>
+                <li id="upperReq" class="invalid">Contains uppercase letters (A-Z)</li>
+                <li id="lowerReq" class="invalid">Contains lowercase letters (a-z)</li>
+                <li id="numberReq" class="invalid">Contains numbers (0-9)</li>
+                <li id="specialReq" class="invalid">Contains special characters (!@#$%^&*)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="password-container">
+            <label for="regConfirmPassword">Confirm Password:</label>
+            <input type="password" id="regConfirmPassword" required placeholder="Re-enter your password">
+            <span class="password-toggle" id="confirmPasswordToggle">Show</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit">Register</button>
+      <div class="back-to-login">
+        <a href="#" id="backToLoginFromRegister">Back to Login</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Forgot Password Container -->
+  <div class="container hidden" id="forgotPasswordContainer">
+    <h2>Forgot Password</h2>
+    <form id="forgotPasswordForm">
+      <div id="forgotPasswordMessage" class="message hidden"></div>
+      
+      <div class="form-section">
+        <label for="emailForReset">Institutional Email Address:</label>
+        <input type="email" id="emailForReset" required placeholder="example@sriher.edu.in" />
+      </div>
+
+      <button type="submit">Reset Password</button>
+      <div class="back-to-login">
+        <a href="#" id="backToLoginFromForgot">Back to Login</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Complaint Container -->
+  <div class="container hidden" id="complaintContainer">
+    <div class="user-info" id="userInfo">
+      <h3>Welcome, <span id="studentName"></span></h3>
+      <p><strong>Department:</strong> <span id="departmentInfo"></span></p>
+      <p><strong>Admission Year:</strong> <span id="admissionYear"></span></p>
+      <p><strong>Roll Number:</strong> <span id="rollNo"></span></p>
+    </div>
+
+    <h2>Student Complaint Registration Form</h2>
+    <form id="complaintForm">
+      <div class="form-section">
+        <div class="form-section-title">Student Details</div>
+        
+        <div class="input-group">
+          <div>
+            <label for="name">Full Name:</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          
+          <div>
+            <label for="email">Institutional Email:</label>
+            <input type="email" id="email" name="email" required placeholder="example@sriher.edu.in">
+          </div>
+        </div>
+        
+        <div class="input-group">
+          <div>
+            <label for="uniqueId">Unique ID:</label>
+            <input 
+              type="text" 
+              id="uniqueId" 
+              name="uniqueId" 
+              pattern="E(01|02|03|05|06)(19|20|21|22|23|24)[0-9]{3}" 
+              required 
+              placeholder="E.g., E0124001"
+              title="Format: E + Dept Code (01/02/03/05/06) + Year (19–24) + 3-digit Roll No">
+          </div>
+          
+          <div>
+            <label for="department">Department:</label>
+            <select id="department" name="department" required disabled>
+              <option value="">Select Department</option>
+              <option value="CSE (AI & ML)">CSE (AI & ML)</option>
+              <option value="CSE (AI & DA)">CSE (AI & DA)</option>
+              <option value="Cyber Security and IoT">Cyber Security and IoT</option>
+              <option value="Computer Science and Medical Engineering (AI & DA)">Computer Science and Medical Engineering (AI & DA)</option>
+              <option value="ECE">ECE</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-section">
+        <div class="form-section-title">Complaint Information</div>
+        
+        <div>
+          <label for="category">Complaint Category:</label>
+          <select id="category" name="category" required>
+            <option value="">--Select Category--</option>
+            <option value="Academic">Academic</option>
+            <option value="Hostel/Mess">Hostel/Mess</option>
+            <option value="Infrastructure">Infrastructure</option>
+            <option value="Examination">Examination</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        
+        <div>
+          <label for="description">Complaint Description:</label>
+          <textarea id="description" name="description" rows="5" required placeholder="Please provide details of your complaint..."></textarea>
+        </div>
+      </div>
+
+      <button type="submit">Submit Complaint</button>
+    </form>
+  </div>
+
+  <footer>
+    <p>© 2025 Sri Ramachandra Engineering and Technology | Developed by 1st year internship Project Team</p>
+    <p>For assistance, contact: support@sriher.edu.in | Phone: +91 44 2476 8000</p>
+  </footer>
+
+  <script>
+    // Mock database (replace with actual MongoDB/MySQL implementation)
+    const mockDatabase = {
+      users: {
+        'E0124001': {
+          name: 'John Doe',
+          email: 'E0124001@sriher.edu.in',
+          password: 'Password@123', // In real app, store hashed passwords
+          department: 'CSE (AI & ML)',
+          admissionYear: '2024',
+          rollNo: '001'
+        }
+      }
+    };
+
+    // Department mapping
+    const deptMap = {
+      '01': 'CSE (AI & ML)',
+      '02': 'Cyber Security and IoT',     
+      '03': 'CSE (AI & DA)',              
+      '05': 'Computer Science and Medical Engineering (AI & DA)',
+      '06': 'ECE'
+    };
+
+    // Helper functions
+    function showMessage(elementId, message, type) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.className = `message ${type}`;
+      element.classList.remove('hidden');
+      
+      setTimeout(() => {
+        element.classList.add('hidden');
+      }, 5000);
+    }
+
+    function generateRandomPassword() {
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+      let password = '';
+      for (let i = 0; i < 10; i++) {
+        password += chars.charAt(Math.floor(Math.random() * chars.length));
+      }
+      return password;
+    }
+
+    // Password validation
+    function validatePassword(password) {
+      const requirements = {
+        length: password.length >= 8,
+        upper: /[A-Z]/.test(password),
+        lower: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[!@#$%^&*]/.test(password)
+      };
+      
+      // Update UI indicators
+      document.getElementById('lengthReq').className = requirements.length ? 'valid' : 'invalid';
+      document.getElementById('upperReq').className = requirements.upper ? 'valid' : 'invalid';
+      document.getElementById('lowerReq').className = requirements.lower ? 'valid' : 'invalid';
+      document.getElementById('numberReq').className = requirements.number ? 'valid' : 'invalid';
+      document.getElementById('specialReq').className = requirements.special ? 'valid' : 'invalid';
+      
+      return requirements.length && requirements.upper && 
+             requirements.lower && requirements.number && 
+             requirements.special;
+    }
+
+    // Mock function to send email (replace with actual email service)
+    function sendPasswordEmail(email, password) {
+      console.log(`Mock: Password ${password} sent to ${email}`);
+      return true;
+    }
+
+    // Mock function to verify user (replace with actual DB check)
+    function verifyUser(email) {
+      for (const uid in mockDatabase.users) {
+        if (mockDatabase.users[uid].email === email) {
+          return uid;
+        }
+      }
+      return null;
+    }
+
+    // Mock function to check if user exists (replace with actual DB check)
+    function userExists(uniqueId, email) {
+      return mockDatabase.users[uniqueId] || Object.values(mockDatabase.users).some(user => user.email === email);
+    }
+
+    // Mock function to create user (replace with actual DB update)
+    function createUser(uniqueId, name, email, department, password) {
+      const match = uniqueId.match(/^E(01|02|03|05|06)(19|20|21|22|23|24)([0-9]{3})$/);
+      if (!match) return false;
+      
+      const deptCode = match[1];
+      const year = match[2];
+      const rollNo = match[3];
+      
+      mockDatabase.users[uniqueId] = {
+        name: name,
+        email: email,
+        password: password, // In real app, hash this password
+        department: department,
+        admissionYear: "20" + year,
+        rollNo: rollNo
+      };
+      
+      return true;
+    }
+
+    // Mock function to update password
+    function updatePassword(uid, newPassword) {
+      if (mockDatabase.users[uid]) {
+        mockDatabase.users[uid].password = newPassword;
+        return true;
+      }
+      return false;
+    }
+
+    // Toggle password visibility
+    function setupPasswordToggle(inputId, toggleId) {
+      const passwordInput = document.getElementById(inputId);
+      const toggleButton = document.getElementById(toggleId);
+      
+      if (!passwordInput || !toggleButton) return;
+      
+      toggleButton.addEventListener('click', function() {
+        if (passwordInput.type === 'password') {
+          passwordInput.type = 'text';
+          toggleButton.textContent = 'Hide';
+        } else {
+          passwordInput.type = 'password';
+          toggleButton.textContent = 'Show';
+        }
+      });
+    }
+
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const uniqueID = document.getElementById('uniqueID').value.trim().toUpperCase();
+      const password = document.getElementById('password').value;
+      
+      // Basic validation
+      if (uniqueID && password) {
+        // Check mock database
+        if (mockDatabase.users[uniqueID] && mockDatabase.users[uniqueID].password === password) {
+          const user = mockDatabase.users[uniqueID];
+          const match = uniqueID.match(/^E(01|02|03|05|06)(19|20|21|22|23|24)([0-9]{3})$/);
+          
+          if (match) {
+            const deptCode = match[1];
+            const year = match[2];
+            const rollNo = match[3];
+            const deptName = deptMap[deptCode];
+            
+            // Fill user info
+            document.getElementById('studentName').textContent = user.name;
+            document.getElementById('departmentInfo').textContent = user.department;
+            document.getElementById('admissionYear').textContent = user.admissionYear;
+            document.getElementById('rollNo').textContent = rollNo;
+            
+            // Pre-fill complaint form
+            document.getElementById('name').value = user.name;
+            document.getElementById('email').value = user.email;
+            document.getElementById('uniqueId').value = uniqueID;
+            document.getElementById('department').value = user.department;
+            
+            // Switch views
+            document.getElementById('loginContainer').classList.add('hidden');
+            document.getElementById('complaintContainer').classList.remove('hidden');
+            document.getElementById('logoutButton').classList.remove('hidden');
+          } else {
+            showMessage('loginMessage', 'Invalid Unique ID format', 'error');
+          }
+        } else {
+          showMessage('loginMessage', 'Invalid credentials', 'error');
+        }
+      } else {
+        showMessage('loginMessage', 'Please enter both Unique ID and Password', 'error');
+      }
+    });
+
+    // Register Link
+    document.getElementById('registerLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('registerContainer').classList.remove('hidden');
+      document.getElementById('registerMessage').classList.add('hidden');
+      // Reset password requirements indicators
+      const requirements = ['lengthReq', 'upperReq', 'lowerReq', 'numberReq', 'specialReq'];
+      requirements.forEach(req => {
+        document.getElementById(req).className = 'invalid';
+      });
+    });
+
+    // Back to Login from Register
+    document.getElementById('backToLoginFromRegister').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('registerContainer').classList.add('hidden');
+      document.getElementById('loginContainer').classList.remove('hidden');
+    });
+
+    // Password validation during typing
+    document.getElementById('regPassword').addEventListener('input', function() {
+      validatePassword(this.value);
+    });
+
+    // Register Form
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('regName').value.trim();
+      const email = document.getElementById('regEmail').value.trim();
+      const uniqueId = document.getElementById('regUniqueId').value.trim().toUpperCase();
+      const department = document.getElementById('regDepartment').value;
+      const password = document.getElementById('regPassword').value;
+      const confirmPassword = document.getElementById('regConfirmPassword').value;
+      
+      if (name && email && uniqueId && department && password && confirmPassword) {
+        // Validate email domain
+        if (!email.endsWith('@sriher.edu.in')) {
+          showMessage('registerMessage', 'Please use your institutional email address', 'error');
+          return;
+        }
+        
+        // Validate unique ID format
+        if (!/^E(01|02|03|05|06)(19|20|21|22|23|24)[0-9]{3}$/.test(uniqueId)) {
+          showMessage('registerMessage', 'Invalid Unique ID format', 'error');
+          return;
+        }
+        
+        // Check if passwords match
+        if (password !== confirmPassword) {
+          showMessage('registerMessage', 'Passwords do not match', 'error');
+          return;
+        }
+        
+        // Check password strength
+        if (!validatePassword(password)) {
+          showMessage('registerMessage', 'Password does not meet requirements', 'error');
+          return;
+        }
+        
+        // Check if user already exists
+        if (userExists(uniqueId, email)) {
+          showMessage('registerMessage', 'User with this ID or email already exists', 'error');
+          return;
+        }
+        
+        // Create user
+        if (createUser(uniqueId, name, email, department, password)) {
+          showMessage('registerMessage', 'Registration successful! You can now login with your credentials.', 'success');
+          
+          // Clear form and return to login after a delay
+          setTimeout(() => {
+            document.getElementById('registerForm').reset();
+            document.getElementById('registerContainer').classList.add('hidden');
+            document.getElementById('loginContainer').classList.remove('hidden');
+            const requirements = ['lengthReq', 'upperReq', 'lowerReq', 'numberReq', 'specialReq'];
+            requirements.forEach(req => {
+              document.getElementById(req).className = 'invalid';
+            });
+            showMessage('loginMessage', 'Registration successful! You can now login.', 'success');
+          }, 3000);
+        } else {
+          showMessage('registerMessage', 'Failed to create user. Please try again.', 'error');
+        }
+      } else {
+        showMessage('registerMessage', 'Please fill in all fields', 'error');
+      }
+    });
+
+    // Forgot Password Link
+    document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('forgotPasswordContainer').classList.remove('hidden');
+      document.getElementById('forgotPasswordMessage').classList.add('hidden');
+    });
+
+    // Back to Login from Forgot Password
+    document.getElementById('backToLoginFromForgot').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('forgotPasswordContainer').classList.add('hidden');
+      document.getElementById('loginContainer').classList.remove('hidden');
+    });
+
+    // Forgot Password Form
+    document.getElementById('forgotPasswordForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('emailForReset').value.trim();
+      
+      if (email) {
+        // Verify email exists in system
+        const uid = verifyUser(email);
+        
+        if (uid) {
+          // Generate a new random password
+          const newPassword = generateRandomPassword();
+          
+          // Update password in database
+          if (updatePassword(uid, newPassword)) {
+            // Send password to email (mock implementation)
+            if (sendPasswordEmail(email, newPassword)) {
+              showMessage('forgotPasswordMessage', 'Your new password has been sent to your email address.', 'success');
+              
+              // Return to login after a delay
+              setTimeout(() => {
+                document.getElementById('forgotPasswordContainer').classList.add('hidden');
+                document.getElementById('loginContainer').classList.remove('hidden');
+                showMessage('loginMessage', 'Check your email for the new password.', 'success');
+              }, 3000);
+            } else {
+              showMessage('forgotPasswordMessage', 'Failed to send password. Please try again.', 'error');
+            }
+          } else {
+            showMessage('forgotPasswordMessage', 'Failed to reset password. Please try again.', 'error');
+          }
+        } else {
+          showMessage('forgotPasswordMessage', 'Email not found in our system', 'error');
+        }
+      } else {
+        showMessage('forgotPasswordMessage', 'Please enter your email', 'error');
+      }
+    });
+
+    // Logout functionality
+    document.getElementById('logoutButton').addEventListener('click', function(e) {
+      e.preventDefault();
+      document.getElementById('loginContainer').classList.remove('hidden');
+      document.getElementById('complaintContainer').classList.add('hidden');
+      document.getElementById('logoutButton').classList.add('hidden');
+      document.getElementById('loginForm').reset();
+    });
+
+    // Department auto-fill based on Unique ID in complaint form
+   document.getElementById('uniqueId').addEventListener('input', function() {
+  const uniqueId = this.value.trim().toUpperCase();
+  const match = uniqueId.match(/^E(01|02|03|05|06)(19|20|21|22|23|24)[0-9]{3}$/);
+  
+  const departmentSelect = document.getElementById('department');
+  
+  if (match) {
+    const deptCode = match[1];
+    const deptName = deptMap[deptCode];
+    departmentSelect.value = deptName;
+    departmentSelect.disabled = true;
+  } else {
+    departmentSelect.value = '';
+    departmentSelect.disabled = false;
+  }
+});
+
+   // Fixed complaint submission
+document.getElementById('complaintForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const uniqueId = document.getElementById('uniqueId').value;
+  const department = document.getElementById('department').value;
+  const category = document.getElementById('category').value;
+  const description = document.getElementById('description').value;
+
+  fetch('http://localhost:5000/api/complaint/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, email, uniqueId, department, category, description })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.msg || 'Complaint submitted');
+    document.getElementById('complaintForm').reset();
+    document.getElementById('department').disabled = false;
+  })
+  .catch(() => {
+    alert('Failed to submit complaint');
+  });
+});
+    
+    // Set up password toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      setupPasswordToggle('password', 'loginPasswordToggle');
+      setupPasswordToggle('regPassword', 'regPasswordToggle');
+      setupPasswordToggle('regConfirmPassword', 'confirmPasswordToggle');
+    });
+  </script>
+</body>
+</html>
